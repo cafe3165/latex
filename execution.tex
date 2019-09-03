@@ -1,0 +1,115 @@
+Based on the runtime knowledge graph, for all operations or rules thereon, the system generates its corresponding usage description. When the user sends the natural language instruction, it matches the usage description by similarity match to find the target operation or rule.
+
+\subsection{Usage scenario and its corresponding program instructions}
+In order to let readers understand the capabilities of the system, combined with the usage scenario in Section 2, this section introduces the types of program instructions based on the runtime knowledge graph.
+
+\subsubsection{Simple operation}
+\paragraph{}
+Jack can send natural language commands of the ``simple operation" for devices or environments in the scenario. For example, ``Turn on the lights in the bedroom" and ``Increase the temperature in the living room." The program instructions corresponding to the above instructions are divided into operations on the device and operations on the service. The instructions which are operated on device are Set $D_{i}.Status$ to on/off and Set $D_{i}.Keym$ to X. The instructions which are operated on service are Set $S_{i}.Status$ on/off and Set SValue to X. As for natural language commands ``Turn on the lights in the bedroom", the program instructions corresponding to it is “Set $D_{i}.Status$ to on”. $D_{i}.DName$ is Smart Light. For Natural language commands ``Increase the temperature in the living room", the program instructions corresponding to it is ``Set $S_{i}.Status$ to X". $S_{i}.CType$ is temperature.
+
+\subsubsection{Quantitative query}
+\paragraph{}
+Ken uses the Virtual Assist's Quantitative Query feature to get device attribute values or environmental status values. For example, Ken asks “What is the temperature of the air conditioner?” The temperature value set by the air conditioner can be obtained. By proposing “What is the PM 2.5 of the living room?”, the service of monitoring the living room PM2.5 is turned on, thereby calling the monitoring function of the corresponding device. The program instructions corresponding to the above instructions are divided into two types: device operation and environment operation. The instructions for device operation are: Get $D_{i}.Status$ / Get $D_{i}.Key_{m}$.The instruction for the environment operation is: Get Ci.CValue. Natural language command “What is the temperature of the air conditioner?”  is “Get $D_{i}.Key_{m}$” in the corresponding program command, $D_{i}.DName$ is Air conditioner. Natural language command “What is the PM 2.5 of the living room?” is “Get Ci.CValue” in the corresponding program command, Ci.LName is sitting room.
+
+\subsubsection{Rule setting}
+\paragraph{}
+The cactus on the balcony needs to survive in a situation where the humidity is greater than 20\% and the light is stronger than 80\%. Depending on the environmental status values, different simple operations need to be triggered. Therefore, the virtual assistant needs to monitor the humidity and brightness of the balcony. When the humidity of the balcony is lower than 20\%, the Smart Water Pump is opened. When the balcony light intensity is less than 80\%, turn on the smart LED to increase the brightness. The program instructions corresponding to the rule settings are as follows: $C_{j}.CValue$ \textgreater X $\mid$  $C_{j}.CValue$ \textless X $\mid$  Y \textless $C_{j}.CValue$ \textless X $\Rightarrow$ Set $D_{i}.Key_{m}$ to X $\mid$  Set $ D_{i}.Status$ to on/off $\mid$ Set $S_{i}.Status$ to on/off $\mid$ Set $S_{i}.Svalue$ to X. In the cactus smart home instruction ``When the humidity of the balcony is below 20\%, open the Smart Water Pump." $C_{j}.LName$ is Balcony, $C_{j}.CValue$ is the humidity of the balcony, X is 20\%, the service provided by the intelligent water valve is Humidity control, $S_{i}.CType$ is Humidity, $S_{i}.Status$ is on.
+
+\subsection{Usage scenario generation based on knowledge graph instance model}
+In order to consider all the cases of the knowledge graph instance model in the target scenario, the corresponding usage scenario is generated for all program instructions that may exist.
+\subsubsection{Simple operation}
+\paragraph{}
+For all device instances and service instances in the knowledge graph instance model, modify their properties and convert them into equivalent use cases, indicating that the program instructions can meet the corresponding conditions, as shown in Table 8. It is divided into four situations: changing the state of the device, changing the properties of the device, changing the state of the service, and changing the properties of the service. For example, in the program instruction ``Set $D_{i}.Status$ to on", $D_{i}.DName$ is air conditioner, $D_{i}.Status$ is on, the corresponding generated sentence is ``Turn on the air conditioner in the sitting room. " Program command ``Set $S_{i}.Status$ off" ", $S_{i}.CType$ is brightness, $S_{i}.Effect$ is reduce, $S_{i}.LName$ is sitting room. The corresponding generated sentence is ``reduce the brightness of sitting room . 
+
+
+%\begin{table}[]
+%	\caption{Usage scenario generation rule for simple operation}
+%	\centering  
+%	\label{table5} 
+%	\renewcommand\arraystretch{2} 
+%	\begin{tabular}{|l|l|p{2cm}|l|l|}
+%		\hline
+%		\multicolumn{1}{|c|}{Object} & \multicolumn{1}{c|}{operating}                                          & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}Given\\ condition\end{tabular}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}Program\\ instruction\end{tabular}} & Corresponding usage scenario                   \\ \hline
+%		\multirow{3}{*}{device}      & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Change\\ state\end{tabular}} & \multirow{2}{*}{任意Di}                                                          & \begin{tabular}[c]{@{}l@{}}Set\\ Di. Status to on\end{tabular}                     & Turn on /open Di.DName in the Di.LName         \\ \cline{4-5} 
+%		&                                                                         &                                                                                & \begin{tabular}[c]{@{}l@{}}Set\\ Di. Status to off\end{tabular}                    & Turn off /shut down Di.DName in the Di.LName   \\ \cline{2-5} 
+%		& \begin{tabular}[c]{@{}l@{}}Change\\ attribute\end{tabular}              & 任意Di，任意Keym                                                                    & \begin{tabular}[c]{@{}l@{}}Set\\ Di.Keym to X\end{tabular}                         & Set/Turn“Keym”of Di.DName in the Di.LName to X \\ \hline
+%		\multirow{3}{*}{service}     & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Change\\ state\end{tabular}} & \multirow{2}{*}{任意Si 且Si.Effect = Increase/Reduce}                             & \begin{tabular}[c]{@{}l@{}}Set\\ Si.Status on\end{tabular}                         & Increase/Reduce the Si.CType of Si.LName       \\ \cline{4-5} 
+%		&                                                                         &                                                                                & \begin{tabular}[c]{@{}l@{}}Set\\ Si.Status off\end{tabular}                        & Reduce/Increase the Si.CType of Si.LName       \\ \cline{2-5} 
+%		& \begin{tabular}[c]{@{}l@{}}Change\\ attribute\end{tabular}              & 任意Si 且Si.Effect = Assign                                                       & \begin{tabular}[c]{@{}l@{}}Set\\ Si.Svalue to X\end{tabular}                       & Set the Si.CType of Si.LName to X              \\ \hline
+%	\end{tabular}
+%\end{table}
+
+
+\subsubsection{Quantitative query}
+\paragraph{}
+For all device instances and service instances in the knowledge graph instance model, the attributes are read and converted into equivalent Usage scenarios. When a certain situation occurs, system need to execute the corresponding operation. It is divided into two situations: Query the status and attributes of the device and query the status of the environment. For example, if the smart light is turned on, the corresponding program command ``Get $D_{i}.Status$", $D_{i}.DName$  is smart light, the corresponding sentence generated is ``Is the smart light on ? "
+
+
+%\begin{table}[!ht]
+%	\caption{Usage scenario generation rule for quantitative query}
+%	\centering  
+%	\label{table6} 
+%	\renewcommand\arraystretch{2}  
+%	\begin{tabular}{|l|l|p{3cm}|l|l}
+%		\cline{1-4}
+%		Event  & Given condition & Program instruction & Corresponding usage scenario  &  \\ \cline{1-4}
+%		\multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Query the status \\ and properties of the device\end{tabular}} & 任意Di            & Get Di. Status                       & Is the Di.DName on/off? | What is the status of Di.DName? &  \\ \cline{2-4}
+%		& 任意Di 任意Keym     & What is the Di.Keym of the Di.DName? & What is the Di.Keym of the Di.DName?                      &  \\ \cline{1-4}
+%		\begin{tabular}[c]{@{}l@{}}Query the status of \\ the environment\end{tabular}                               & 任意Ci            & Get Ci.CValue                        & What is the Ci.CType in the Ci.LName?                     &  \\ \cline{1-4}
+%	\end{tabular}
+%\end{table}
+
+
+\subsubsection{Rule setting}
+\paragraph{}
+Set the inference rules for each operation, triggering the execution of different simple operations based on the environmental state value constraints. The conditions are as shown in Table 10 , the triggered operation is the same as the simple operation. For example, when the living room temperature is lower than 16 degrees, the temperature of the living room is raised. The corresponding program command is “Cj.CValue < X”, where Cj.LName= sitting room, Cj.CValue is the temperature state value of the living room, X=16 Degree, the simple operation corresponding to the improvement of the living room temperature is ``Set $S_{i}.Svalue$ on", $S_{i}.CType$ is temperature, $S_{i}.Effect$ is increase, $S_{i}.Svalue$ is the temperature service parameter, $S_{i}.LName$ is sitting room, the corresponding sentence is If the temperature in the sitting room is less than 16 degrees, increase the temperature of sitting room .
+
+\begin{table}[!ht]
+	\caption{Usage scenario generation rule for Rule setting}
+	\centering  
+	\label{table7} 
+	\renewcommand\arraystretch{2}  
+		\begin{tabular*}{\hsize}{|l|l|l|}  
+			\hline
+			Given condition	& Given condition & Corresponding usage scenario \\
+			\hline
+			$\forall C_{j}$ & $C_{j}.CValue$ \textgreater X & If the $C_{j}.CType$ is higher than/more than/above X\\
+			\hline
+			$\forall C_{j}$ & $C_{j}.CValue$ \textless X & If the $C_{j}.CType$ is lower than/less than/below X\\
+			\hline
+			$\forall C_{j}$ & Y \textless $C_{j}.CValue$ \textless X & If the $C_{j}.CType$ is between Y and X\\
+			\hline
+		\end{tabular*}
+\end{table}
+
+\subsection{Automatic conversion of natural language to program instructions}
+When a user sends a natural language instruction, it is similarly matched to the usage description to find the target operation or rule. Simple sentences (including simple operations and quantitative queries) directly match the usage scenario, and the compound sentence (rule setting) is first processed into two simple sentences, and then matched separately.
+
+$$X=(x_{1},x_{2},...,x_{n}) \eqno(1-1)$$
+$$X_{i}=\frac{\sum_{j=1}^{n}x_{i}}{n}(i=1,2,...,n) \eqno(1-2)$$
+
+Vectorizing representations of words is the basic operation of text analysis. Word vectors can represent text as a continuous, multidimensional vector. In a colloquial manner, the word vector quantifies sentences that are difficult to express. By converting sentences into numbers, sentences can be calculated and speculated. The word vector technique is equivalent to quantifying words that cannot be expressed, and uses spatial distance to reflect the similarity of two words. The higher the similarity of the two words, the closer the distance in space. The more unrelated the two words, the farther the distance in space. Since the similarity between two words and sentences cannot be directly calculated, it is necessary to use the word vector technique to express the sentence as data first. In this paper, a distributed representation is used to represent a word, and a fixed-length m-dimensional vector is used to express an English character, such as formula (1-1). Adding the number of the corresponding dimension of each sentence of a sentence removes the number of words in the sentence, and obtains the fifty-dimensional vector of the sentence, as in formula (1-2).
+
+
+In this paper, the cosine similarity method is used to match the user instruction with the usage description. In the xoy coordinate axis, the angle between the two vectors can be used to calculate the cosine value. The smaller the angle, the closer the cosine value is to 1, then the directionality of the two vectors is more consistent and similar. Conversely, the closer the cosine value is to zero, the closer the angle is to $90^{\circ}$, indicating that the two vectors are not similar. Promote to multidimensional space, the greater the distance, the smaller the similarity. The smaller the distance, the greater the similarity. From the above conclusions, it can be known that after the angle between the two sentences is obtained, the calculation of the cosine value can be used to determine the similarity of the individual. The vector a is represented by coordinates $(x_{1}, y_{1})$, the vector b is represented by coordinates $(x_{2}, y_{2})$, and the vector n is represented by coordinates $(x_{n}, y_{n})$.
+$$ cos(\Theta) =\frac{\sum_{i=1}^{n}(x_{i} \times  y_{i})}{\sqrt{\sum_{i=1}^{n}{x_{i}}^{2}} \times  \sqrt{\sum_{i=1}^{n}{y_{i}}^{2}}}  \eqno(1-3)$$
+Then the similarity of two multidimensional vectors can be calculated by equation (1-3). For a simple sentence, take the top5 with the highest similarity as the final match result. For a compound sentence, the processing is two simple sentences that respectively represent conditions and actions, and respectively match. The result of the compound sentence matching is the respective top5 obtained by matching the conditional sentence and the action sentence respectively, and the Cartesian product is obtained. The 25 instructions after the Cartesian product are calculated again with the original compound instruction, and the top 5 is taken out, and the strategy can guarantee The accuracy of compound sentences does not drop too much.
+
+For example, for the user's simple sentence ``Turn up the brightness." Firstly, according to the runtime knowledge garph to query the current user's location information, and get LNAME as the sitting room, according to the above processing rules, the perfect sentence is ``Turn up the brightness in the sitting room." After the sentence is vectorized, the word vector of the sentence is obtained.
+
+The word vector and the generated usage corpus are used to calculate the similarity one by one, and the top5 results are as follows:
+
+increase the brightness of sitting room .
+
+reduce the brightness of sitting room .
+
+turn the brightness of the smart light in the sitting room to x .
+
+monitor the brightness of sitting room .
+
+set the brightness of sitting room to x .
+
+The top1 matching result with the highest similarity value is ``Increase the brightness of sitting room."The similarity calculation result of the two is 0.98767.
+The program command matched by this condition is ``Set $S_{i}.Status$ on", wherein the device of $S_{i}.CType$ is brightness and $S_{i}.Lname$ is sitting room is Smart Light, and then the program instruction is executed based on the runtime knowledge .
+
+

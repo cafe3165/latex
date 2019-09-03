@@ -1,0 +1,82 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{booktabs} %三线表
+\usepackage{array}    %指定列宽并居中
+\usepackage{float}
+\usepackage{multirow} %多行合并
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+
+\begin{document}
+%
+%define vars
+\def \toolname {}
+%
+\title{Orchestrating Smart Home Services from Natural Language Instructions - A Framework based on Runtime Knowledge Graph}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Xing Chen\inst{1} \and
+Liwei Shen\inst{2,3} \and
+Zhangying Lin\inst{1} \and
+Zhiming Huang\inst{1}}
+%
+\authorrunning{X. Chen et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{Fuzhou University, FuZhou, , China \and
+School of Computer Science, Fudan University, Shanghai, 200433, China \and
+Shanghai Key Laboratory of Data Science, Fudan University, Shanghai, 200433, China}
+
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+The abstract should briefly summarize the contents of the paper in
+150--250 words.
+
+\keywords{Smart Home  \and End-user Manipulation \and Knowledge Graph.}
+\end{abstract}
+%
+%
+%
+\section{Introduction}\label{sec:introduction}
+\input{introduction}
+\section{Overview}\label{sec:overview}
+\input{overview}
+\section{Runtime Knowledge Graph for Smart Home}\label{sec:knowledgegraph}
+\input{knowledgegraph}
+\section{Modeling and Execution}\label{sec:execution}
+\input{execution}
+\section{Evaluation}\label{sec:evaluation}
+\input{evaluation}
+\section{Related Work}\label{sec:relatedwork}
+\input{relatedwork}
+\section{Conclusion}\label{sec:conclusion}
+\input{conclusion}
+
+\bibliography{reference}
+\bibliographystyle{splncs04}
+
+
+% \end{thebibliography}
+\end{document}
